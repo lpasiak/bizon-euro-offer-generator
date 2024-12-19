@@ -1,2 +1,5 @@
 /info
+/products
 .env.bat
+__pycache__
+venv
