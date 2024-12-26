@@ -18,11 +18,19 @@ shoper_columns_to_keep = ['product_code',
                           'images 9',
                           'images 10']
 
-offers_to_create = pd.read_csv(GSHEETS_OFFERS)
-product_descriptions = pd.read_csv(GSHEETS_DESCRIPTIONS)
-shoper_offers = pd.read_csv(SHOPER_OFFERS_FILE_PATH, sep=';', usecols=shoper_columns_to_keep)
+offers_to_create = pd.read_csv(GSHEETS_OFFERS, dtype=str)
+product_descriptions = pd.read_csv(GSHEETS_DESCRIPTIONS, dtype=str)
+shoper_offers = pd.read_csv(SHOPER_OFFERS_FILE_PATH,
+                            sep=';',
+                            usecols=shoper_columns_to_keep,
+                            dtype=str)
 
+# Merge the DataFrames
+merged_df = pd.merge(offers_to_create, product_descriptions, on='Seria', how='left')
 
-print(shoper_offers)
+merged_df.to_excel('oferty.xlsx', index=False)
 
+print(merged_df)
+
+# Create a CSS file
 functions.generate_css_file()

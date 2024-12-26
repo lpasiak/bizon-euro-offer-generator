@@ -1,33 +1,30 @@
 import os
 
 def generate_css_file():
-
-    directory = 'products/css'
+    # Define paths
+    source_file_path = os.path.join('data', 'style.css')
+    directory = os.path.join('products', 'css')
     file_path = os.path.join(directory, 'style.css')
 
-    if not os.path.exists(directory):
-        os.makedirs(directory)
+    try:
+        # Ensure the source file exists
+        if not os.path.exists(source_file_path):
+            print(f"Source file does not exist: {source_file_path}")
+            return
 
-    # CSS contents
-    contents = """
-/* css reset */
-#prod-desc-container,#prod-desc-container *{box-sizing:border-box}
-#prod-desc-container{max-width:920px;margin:0 auto;font-family:Lato,sans-serif}
-#prod-desc-container .desc-img,#prod-desc-container .desc-img.lazy{width:initial;max-width:100%;height:auto}
+        # Create destination directory if it doesn't exist
+        if not os.path.exists(directory):
+            os.makedirs(directory)
 
-/* custom style */
-#prod-desc-container .flex-container{display:flex;flex-wrap:wrap;flex-direction:row}
-#prod-desc-container .col{padding:.5em}
-#prod-desc-container .col-1{width:100%}
-#prod-desc-container .col-2{width:50%}
-#prod-desc-container .col-3{width:33.33%}
-#prod-desc-container .col.center{justify-content:center;text-align:center;display:flex;flex-wrap:wrap;align-content:flex-start}
-@media screen and (max-width:919px){
-#prod-desc-container{font-size:14px;max-width:100%}
-#prod-desc-container .col-1,#prod-desc-container .col-2,#prod-desc-container .col-3{width:100%}
-#prod-desc-container .flex-container.revert{flex-direction:column-reverse}}"""
+        # Read the source file
+        with open(source_file_path, 'r') as r_file:
+            contents = r_file.read()
 
-    with open(file_path, 'w') as file:
-        file.write(contents)
+        # Write to the destination file
+        with open(file_path, 'w') as file:
+            file.write(contents)
 
-    print(f"CSS file created at: {file_path}")
+        print(f"CSS file created at: {file_path}")
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
