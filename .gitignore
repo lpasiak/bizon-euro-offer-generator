@@ -1,5 +1,7 @@
 /info
 /products
 .env.bat
+.env.sh
 __pycache__
 venv
+.DS_Store
