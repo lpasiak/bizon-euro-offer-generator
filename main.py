@@ -1,6 +1,7 @@
+from pathlib import Path
+import requests
 import pandas as pd
 import os
-import functions
 
 GSHEETS_OFFERS = os.environ.get('GSHEETS_OFFERS')
 GSHEETS_DESCRIPTIONS = os.environ.get('GSHEETS_DESCRIPTIONS')
@@ -27,10 +28,20 @@ shoper_offers = pd.read_csv(SHOPER_OFFERS_FILE_PATH,
 
 # Merge the DataFrames
 merged_df = pd.merge(offers_to_create, product_descriptions, on='Seria', how='left')
+final_df = pd.merge(merged_df, shoper_offers, left_on='SKU', right_on='product_code', how='left')
 
-merged_df.to_excel('oferty.xlsx', index=False)
+final_df.to_excel('oferty.xlsx', index=False)
+print(final_df)
 
-print(merged_df)
+# Main function
+for index, row in final_df.iterrows():
+    product_folder = Path(f'{row['PLU']}_{row['Seria'].lower().replace(' ', '_')}')
+    img_folder = Path.joinpath(product_folder, 'img')
+
+    print(f'{row['SKU']}: {row['Nazwa']}')
+
+    product_folder.mkdir(exist_ok=True)
+    img_folder.mkdir(exist_ok=True)
 
 # Create a CSS file
-functions.generate_css_file()
+# functions.generate_css_file()
