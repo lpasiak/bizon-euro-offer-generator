@@ -2,6 +2,7 @@ from pathlib import Path
 import requests
 import pandas as pd
 import os
+import my_functions as mf
 
 GSHEETS_OFFERS = os.environ.get('GSHEETS_OFFERS')
 GSHEETS_DESCRIPTIONS = os.environ.get('GSHEETS_DESCRIPTIONS')
@@ -31,6 +32,8 @@ if style_path.exists():
 def main():
     # Create the "products" directory
     products_path = Path("products")
+    zipped_products_path = Path("zipped_products")
+
     products_path.mkdir(exist_ok=True)
 
     for index, row in final_df.iterrows():  # Loop through the entire DataFrame
@@ -93,6 +96,8 @@ def main():
     # Save the updated DataFrame to Excel
     final_df.to_excel('oferty.xlsx', index=False)
     print("Updated DataFrame saved to 'oferty.xlsx'.")
+
+    mf.zip_all_folders(products_path, zipped_products_path)
 
 if __name__ == "__main__":
     main()

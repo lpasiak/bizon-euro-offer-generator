@@ -1,5 +1,6 @@
 /info
 /products
+/zipped_products
 .env.bat
 .env.sh
 __pycache__
