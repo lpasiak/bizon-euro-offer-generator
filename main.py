@@ -33,15 +33,27 @@ final_df = pd.merge(merged_df, shoper_offers, left_on='SKU', right_on='product_c
 final_df.to_excel('oferty.xlsx', index=False)
 print(final_df)
 
+style_path = Path('data/style.css')
+
+if style_path.exists():
+    style_contents = style_path.read_text(encoding='utf-8')
+    print("Style.css contents loaded successfully.")
+
 # Main function
 for index, row in final_df.iterrows():
     product_folder = Path(f'{row['PLU']}_{row['Seria'].lower().replace(' ', '_')}')
-    img_folder = Path.joinpath(product_folder, 'img')
+    img_folder = product_folder / 'img'
+    css_folder = product_folder / 'css'
 
-    print(f'{row['SKU']}: {row['Nazwa']}')
 
     product_folder.mkdir(exist_ok=True)
     img_folder.mkdir(exist_ok=True)
+    css_folder.mkdir(exist_ok=True)
+    
+    if style_contents:
+        (css_folder / "style.css").write_text(style_contents, encoding='utf-8')
+        print(f"style.css created in {css_folder}")
 
-# Create a CSS file
-# functions.generate_css_file()
+    print(f'{row['SKU']}: {row['Nazwa']}')
+
+
